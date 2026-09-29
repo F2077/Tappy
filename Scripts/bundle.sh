@@ -39,9 +39,15 @@ rm -rf "$ICONSET"
 # SwiftPM resource bundles (SVG artwork, sounds, localizations) ship in
 # Contents/Resources — the app root cannot hold them because codesign
 # refuses to seal unsealed root contents. TappyResources.bundle resolves
-# this location at runtime.
+# this location at runtime. SwiftPM's generated Info.plist lacks
+# CFBundleIdentifier, which App Store validation rejects (error 90276),
+# so inject one derived from the bundle's directory name.
 for bundle in .build/release/*.bundle; do
     cp -R "$bundle" "$APP/Contents/Resources/"
+    dest="$APP/Contents/Resources/$(basename "$bundle")"
+    slug=$(basename "$bundle" .bundle | tr 'A-Z_' 'a-z-')
+    /usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string $BUNDLE_ID.$slug" \
+        "$dest/Info.plist"
 done
 # Third-party notices ship inside the app so CC-BY attribution travels
 # with the binary, not just the source tree.
@@ -63,6 +69,7 @@ cat > "$APP/Contents/Info.plist" <<EOF
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>NSPrincipalClass</key><string>NSApplication</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
+    <key>LSApplicationCategoryType</key><string>public.app-category.education</string>
     <key>CFBundleDevelopmentRegion</key><string>en</string>
     <key>CFBundleLocalizations</key>
     <array>
@@ -86,9 +93,42 @@ if [ -n "$PROFILE" ]; then
     cp "$PROFILE" "$APP/Contents/embedded.provisionprofile"
 fi
 
+# Downloaded ingredients (e.g. the provisioning profile) may carry
+# com.apple.quarantine; App Store validation rejects any xattrs inside
+# the bundle (error 91109), so strip them all before signing.
+xattr -cr "$APP"
+
+# When a profile is embedded, the signature must claim the same
+# application identifier the profile authorizes, or App Store upload
+# fails with error 90886. Derive it from the profile at build time so
+# no team ID is hardcoded in the repo.
+SIGN_ENTITLEMENTS=$ENTITLEMENTS
+if [ -n "$PROFILE" ]; then
+    # Note: PlistBuddy (not plutil -extract) — its ":" keypath syntax
+    # survives entitlement keys that themselves contain dots.
+    PROFILE_PLIST=$(mktemp -t tappy-profile)
+    security cms -D -i "$PROFILE" 2>/dev/null > "$PROFILE_PLIST"
+    APP_ID=$(/usr/libexec/PlistBuddy -c "Print :Entitlements:com.apple.application-identifier" "$PROFILE_PLIST")
+    rm -f "$PROFILE_PLIST"
+    case "$APP_ID" in
+        *."$BUNDLE_ID") : ;;
+        *) echo "error: profile App ID $APP_ID does not match bundle id $BUNDLE_ID" >&2; exit 1 ;;
+    esac
+    SIGN_ENTITLEMENTS=$(mktemp -t tappy-entitlements)
+    if [ -n "$ENTITLEMENTS" ]; then
+        cp "$ENTITLEMENTS" "$SIGN_ENTITLEMENTS"
+    else
+        printf '%s\n' '<?xml version="1.0" encoding="UTF-8"?>' \
+            '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' \
+            '<plist version="1.0"><dict/></plist>' > "$SIGN_ENTITLEMENTS"
+    fi
+    /usr/libexec/PlistBuddy -c "Add :com.apple.application-identifier string $APP_ID" "$SIGN_ENTITLEMENTS"
+    /usr/libexec/PlistBuddy -c "Add :com.apple.developer.team-identifier string ${APP_ID%%.*}" "$SIGN_ENTITLEMENTS"
+fi
+
 # Sign with the configured identity, or ad-hoc ("-") for local builds.
-if [ -n "$ENTITLEMENTS" ]; then
-    codesign --force --options runtime --entitlements "$ENTITLEMENTS" \
+if [ -n "$SIGN_ENTITLEMENTS" ]; then
+    codesign --force --options runtime --entitlements "$SIGN_ENTITLEMENTS" \
         --sign "$SIGN_IDENTITY" "$APP"
 else
     codesign --force --options runtime --sign "$SIGN_IDENTITY" "$APP"
