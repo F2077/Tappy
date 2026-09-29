@@ -38,7 +38,7 @@ struct SettingsView: View {
                     }
 
                 // Positioning statement, parent-facing: says what the
-                // app is (an early-learning toy) and what it is not
+                // app is (an early-learning app) and what it is not
                 // (no ads / offline / no IAP) in one breath.
                 Text(L10n.settingsAbout)
                     .font(.callout)

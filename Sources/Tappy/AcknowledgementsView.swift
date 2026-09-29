@@ -4,7 +4,7 @@ import TappyCore
 /// Parent-facing "About this app" page. The backstory comes first —
 /// a dad's gift to his daughter, a prop for parent-child play — which
 /// frames the app (for parents and reviewers alike) as an early-learning
-/// toy rather than a game. The source-code link follows (the project is
+/// app rather than a game. The source-code link follows (the project is
 /// MIT-licensed open source), then the complete licence texts — the
 /// app's own MIT plus the third-party works (Twemoji artwork under
 /// CC-BY 4.0 requires attribution regardless of the app's own licence).

@@ -14,7 +14,7 @@
 "about.ackTitle" = "Material de terceros y licencias";
 "hint.explore" = "Toca el teclado y aprende sus nombres y sonidos";
 "settings.lock" = "Bloqueo infantil (pantalla completa, a prueba de travesuras)";
-"settings.about" = "Un juguete de aprendizaje para peques: toca y aparecen animales y vehículos: sus nombres, sus sonidos, grandes y pequeños. Sin anuncios, sin internet, sin compras integradas.";
+"settings.about" = "Una app de aprendizaje para peques: toca y aparecen animales y vehículos: sus nombres, sus sonidos, grandes y pequeños. Sin anuncios, sin internet, sin compras integradas.";
 "license.twemoji" = "Gráficos de Twemoji";
 "license.sounds" = "Efectos de sonido";
 "license.swiftdraw" = "SwiftDraw (renderizado SVG)";
