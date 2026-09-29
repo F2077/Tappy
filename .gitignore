@@ -1,0 +1,14 @@
+.build/
+.swiftpm/
+build/
+.DS_Store
+*.xcodeproj
+xcuserdata/
+.vscode/
+
+# Signing assets — safety net only; the real config lives outside the
+# repo in ~/.config/tappy/. See docs/signing.md.
+*.provisionprofile
+*.p12
+*.p8
+*.certSigningRequest

@@ -1,0 +1,41 @@
+Third-Party Notices
+===================
+
+Tappy bundles or depends on the following third-party works.
+
+Artwork — Twemoji
+-----------------
+Entity artwork in the built-in resource packs (Sources/TappyCore/Resources/
+Packs/*/…​) is from Twemoji (https://github.com/jdecked/twemoji),
+copyright 2019-2024 Twitter, Inc. and other contributors, licensed under
+CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Files were renamed
+from their original Unicode-codepoint names; the artwork itself is
+unmodified. Per-pack details live in each pack's NOTICE.txt.
+
+Sounds — OpenGameArt (CC0)
+--------------------------
+Some sound effects come from OpenGameArt.org contributors under CC0
+(public domain, no attribution required). Full credits: each pack's
+sounds/NOTICE.txt. All other sounds are synthesized by this repository's
+own Scripts/synth-*.swift and carry no third-party rights.
+
+Dependency — SwiftDraw
+----------------------
+SVG rasterization uses SwiftDraw (https://github.com/swhitty/SwiftDraw),
+copyright (c) 2019 Simon Whitty, licensed under the zlib license
+(permissive; notice retained in the package checkout and reproduced in the
+built app's Contents/Resources/NOTICE.txt).
+
+Runtime — SF Symbols
+--------------------
+Fallback glyphs are Apple SF Symbols, referenced by name only and rendered
+by macOS at runtime (nothing bundled). Apple's license permits this inside
+apps on Apple platforms; the symbols must NOT be reused as the app's
+icon/logo or on other platforms — see docs/resource-packs.md.
+
+App icon
+--------
+Assets/AppIcon.png was AI-generated (ChatGPT) for this project and is used
+under OpenAI's output-ownership terms; no third-party rights are known to
+apply. AI-generated images may have limited copyright protection, so treat
+the icon as a brand asset rather than an enforceable copyright work.
