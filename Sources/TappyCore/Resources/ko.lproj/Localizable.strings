@@ -14,7 +14,7 @@
 "about.ackTitle" = "타사 소재와 라이선스";
 "hint.explore" = "키보드를 두드리고 이름과 소리를 배워요";
 "settings.lock" = "유아 잠금(전체 화면 오작동 방지)";
-"settings.about" = "영유아 학습 장난감: 톡톡 두드리면 동물과 탈것이 나타나요. 이름과 소리, 크기를 배워 보세요. 광고 없음 · 오프라인 · 앱 내 구매 없음.";
+"settings.about" = "영유아 학습 앱: 톡톡 두드리면 동물과 탈것이 나타나요. 이름과 소리, 크기를 배워 보세요. 광고 없음 · 오프라인 · 앱 내 구매 없음.";
 "license.twemoji" = "Twemoji 아트 소스";
 "license.sounds" = "효과음 소스";
 "license.swiftdraw" = "SwiftDraw(SVG 렌더링)";
