@@ -1,5 +1,9 @@
 # Tappy
 
+<p align="center">
+  <img src="Assets/AppIcon.png" width="128" alt="Tappy app icon">
+</p>
+
 A baby-safe macOS toy: click the mouse or bang the keyboard and cute
 things pop up with sounds. Tappy is a generic engine — all content
 (animals today; vehicles, sea creatures, professions, … tomorrow) comes
