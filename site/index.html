@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>敲敲小世界 Pat-a-Pet：拍一拍，蹦出小动物</title>
+<meta name="description" content="拍一拍键盘，小动物就蹦出来。一款给 1 到 3 岁宝宝的 macOS 启蒙 App：完全离线、无广告、MIT 开源。孩子负责拍，你负责说。">
+<meta property="og:title" content="敲敲小世界 Pat-a-Pet">
+<meta property="og:description" content="拍一拍键盘，小动物就蹦出来。macOS 幼儿启蒙 App，完全离线，MIT 开源。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://f2077.github.io/Tappy/assets/logo.png">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<style>
+:root {
+  --sky-top: #B8DBED;
+  --sky-cream: #F5EDD1;
+  --meadow: #9ECC8C;
+  --meadow-deep: #85BD75;
+  --mushroom-red: #E64D40;
+  --mushroom-red-dark: #C94034;
+  --ink: #234B3C;
+  --ink-soft: #4E6E60;
+  --sand: #C4A46C;
+  --paper: #FAF5E4;
+  --paper-bright: #FFFDF4;
+  --display: ui-rounded, "Yuanti SC", "Yuanti", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+  --body: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+[hidden] { display: none !important; }
+a { color: var(--mushroom-red); text-underline-offset: 0.2em; }
+a:hover { color: var(--mushroom-red-dark); }
+:focus-visible { outline: 3px solid var(--mushroom-red); outline-offset: 3px; border-radius: 4px; }
+
+/* ---------- hero: the app's world ---------- */
+.sky {
+  position: relative;
+  background: linear-gradient(180deg, var(--sky-top) 0%, #CDE6F2 45%, var(--sky-cream) 82%);
+  overflow: hidden;
+  padding: 1.25rem 1.5rem 0;
+}
+.sun {
+  position: absolute;
+  top: 8%; right: 12%;
+  width: 9rem; height: 9rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFE680 0%, rgba(255, 230, 128, 0) 70%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+.lang-toggle {
+  position: absolute;
+  top: 1.25rem; right: 1.5rem;
+  z-index: 3;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: rgba(255, 253, 244, 0.75);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  cursor: pointer;
+}
+.lang-toggle:hover { background: var(--paper-bright); }
+.hero {
+  position: relative;
+  z-index: 2;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 4.5rem 0 11rem;
+  text-align: center;
+}
+.hero img.logo {
+  width: 150px; height: 150px;
+  border-radius: 22.4%;
+  box-shadow: 0 12px 32px rgba(35, 75, 60, 0.25);
+  animation: pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s backwards;
+}
+@keyframes pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.14); }
+  100% { transform: scale(1); }
+}
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-top: 1.5rem;
+  line-height: 1.25;
+}
+.hero h1 .en-name {
+  display: block;
+  font-size: 0.42em;
+  font-weight: 700;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  margin-top: 0.3rem;
+}
+.pitch {
+  font-size: 1.15rem;
+  color: var(--ink);
+  max-width: 32rem;
+  margin: 1.25rem auto 0;
+}
+.hero .sysline {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  margin-top: 0.9rem;
+}
+.ctas {
+  margin-top: 1.8rem;
+  display: flex;
+  gap: 0.9rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.7rem;
+  text-decoration: none;
+  border: 2px solid transparent;
+}
+.btn-primary {
+  background: var(--mushroom-red);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--mushroom-red-dark); color: #fff; }
+.btn-ghost {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: rgba(255, 253, 244, 0.6);
+}
+.btn-ghost:hover { background: var(--paper-bright); }
+.btn-soon {
+  border: 2px dashed var(--ink-soft);
+  color: var(--ink-soft);
+  background: transparent;
+  cursor: default;
+}
+/* hills + creatures */
+.hills { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 1; }
+.hills svg { display: block; width: 100%; height: auto; }
+.creature { position: absolute; z-index: 1; animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
+.creature svg { display: block; width: 100%; height: auto; }
+.creature.rabbit  { left: 9%;  bottom: 12%; width: 84px; animation-delay: 0.5s; }
+.creature.bird    { right: 12%; bottom: 26%; width: 60px; animation-delay: 0.65s; }
+.creature.ladybug { left: 26%; bottom: 4%;  width: 40px; animation-delay: 0.8s; }
+
+/* ---------- sections ---------- */
+main { position: relative; }
+section {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem;
+}
+section h2 {
+  font-family: var(--display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 1.75rem;
+}
+.band { background: var(--paper-bright); }
+.band > section { /* keep same measure */ }
+
+/* how to play: a real sequence, so numbers earn their place */
+.steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  counter-reset: step;
+}
+.steps li {
+  counter-increment: step;
+  background: var(--paper-bright);
+  border-radius: 20px;
+  padding: 1.5rem 1.4rem;
+}
+.band .steps li { background: var(--paper); }
+.steps li::before {
+  content: counter(step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem; height: 2.2rem;
+  border-radius: 50%;
+  background: var(--meadow-deep);
+  color: #fff;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+}
+.steps h3 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+.steps p { font-size: 0.98rem; color: var(--ink-soft); line-height: 1.75; }
+figure.screenshot { margin-top: 2.5rem; }
+figure.screenshot img {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(35, 75, 60, 0.18);
+  display: block;
+}
+figure.screenshot figcaption {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-top: 0.8rem;
+}
+
+/* for parents: plain trust list */
+.trust { list-style: none; max-width: 40rem; }
+.trust li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 1.05rem;
+}
+.trust li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.62em;
+  width: 0.7rem; height: 0.7rem;
+  border-radius: 50%;
+  background: var(--meadow-deep);
+}
+.trust li:nth-child(2n)::before { background: var(--meadow); }
+.trust strong { font-weight: 700; }
+
+/* story: the emotional centre, generous measure */
+.story { max-width: 40rem; }
+.story p { font-size: 1.08rem; margin-bottom: 1.1em; }
+.story p:last-child { margin-bottom: 0; }
+
+/* open source */
+.opensource p { max-width: 40rem; margin-bottom: 1.1em; }
+.opensource .btn { margin-top: 0.5rem; display: inline-block; }
+
+/* footer: the ground */
+footer {
+  background: var(--sand);
+  color: #4A3A1E;
+  padding: 2.5rem 1.5rem 3rem;
+  text-align: center;
+  font-size: 0.92rem;
+}
+footer p { margin-bottom: 0.35em; }
+footer a { color: #5C2E28; }
+
+@media (max-width: 720px) {
+  .steps { grid-template-columns: 1fr; }
+  .hero { padding: 4rem 0 9rem; }
+  .hero img.logo { width: 120px; height: 120px; }
+  .creature.rabbit { width: 64px; }
+  .creature.bird { width: 46px; bottom: 30%; }
+  .creature.ladybug { width: 32px; }
+  section { padding: 3.25rem 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero img.logo, .creature { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="sky">
+  <div class="sun" aria-hidden="true"></div>
+  <button class="lang-toggle" id="langToggle" aria-label="Switch language / 切换语言">EN</button>
+
+  <div class="hero">
+    <img class="logo" src="assets/logo.png" alt="敲敲小世界 Pat-a-Pet app icon" width="150" height="150">
+    <h1>敲敲小世界<span class="en-name">Pat-a-Pet</span></h1>
+    <p class="pitch" data-lang="zh">拍一拍键盘，小动物就蹦出来。一款给 1 到 3 岁宝宝的 macOS 启蒙 App——孩子负责拍，你负责说。</p>
+    <p class="pitch" data-lang="en" hidden>Bang the keyboard and cute animals pop up. A macOS app for ages 1 to 3: your child taps, you tell the story.</p>
+    <p class="sysline" data-lang="zh">适用于 macOS 14 及以上，完全离线，MIT 开源</p>
+    <p class="sysline" data-lang="en" hidden>For macOS 14 and later. Fully offline. Open source under MIT.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="https://github.com/F2077/Tappy" data-lang="zh">在 GitHub 看源码</a>
+      <a class="btn btn-primary" href="https://github.com/F2077/Tappy" data-lang="en" hidden>View on GitHub</a>
+      <span class="btn btn-soon" data-lang="zh" aria-disabled="true">Mac App Store 审核中</span>
+      <span class="btn btn-soon" data-lang="en" aria-disabled="true" hidden>Mac App Store (in review)</span>
+    </div>
+  </div>
+
+  <div class="hills" aria-hidden="true">
+    <span class="creature rabbit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#99AAB5" d="M33.799.005c-.467-.178-7.998 3.971-9.969 9.131-1.166 3.052-1.686 6.058-1.652 8.112C20.709 16.459 19.257 16 18 16s-2.709.458-4.178 1.249c.033-2.055-.486-5.061-1.652-8.112C10.2 3.977 2.668-.173 2.201.005c-.455.174 4.268 16.044 7.025 20.838C6.805 23.405 5 26.661 5 29.828c0 3.234 1.635 5.14 4 5.94 2.531.857 5-.94 9-.94s6.469 1.798 9 .94c2.365-.801 4-2.706 4-5.94 0-3.166-1.805-6.423-4.225-8.984C29.53 16.049 34.255.179 33.799.005z"/><path fill="#F4ABBA" d="M12.692 17.922c-.178-1.54-.68-3.55-1.457-5.584-1.534-4.016-5.686-7.245-6.049-7.107-.319.122 2.627 10.14 4.783 14.863.866-.824 1.786-1.563 2.723-2.172zm13.338 2.172c2.156-4.723 5.102-14.741 4.784-14.862-.363-.139-4.516 3.091-6.05 7.107-.777 2.034-1.279 4.043-1.457 5.583.937.609 1.857 1.348 2.723 2.172z"/><path fill="#CCD6DD" d="M25 30c0 2.762-3.06 5-6.834 5-3.773 0-6.833-2.238-6.833-5s3.06-5 6.833-5C21.94 25 25 27.238 25 30z"/><path fill="#FFF" d="M21 30.578c0 2.762-.238 3-3 3-2.761 0-3-.238-3-3 0-1 6-1 6 0z"/><circle fill="#292F33" cx="12.5" cy="24.328" r="1.5"/><circle fill="#292F33" cx="23.5" cy="24.328" r="1.5"/><path fill="#F4ABBA" d="M21 25.828c0 1.657-2 3-3 3s-3-1.343-3-3 6-1.657 6 0z"/></svg></span>
+    <span class="creature bird"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#FFAC33" d="M8.916 12.88c-.111 1.652 1.768 3.126-.712 2.959-2.48-.167-7.836-2.533-7.768-3.53s3.708-2.757 6.188-2.59c2.48.166 2.404 1.508 2.292 3.161zm20.122 16.049c-.202-.032-.392.015-.564.095-2.325.232-3.225-1.885-3.225-1.885-.439-.336-.981-2.009-1.589-1.215l.187 1.402c.187 1.402 2.57 3.224 2.57 3.224l-1.215 1.589c-.336.439-.252 1.066.187 1.402.439.336 1.066.252 1.402-.187l.673-.88-.039.249c-.087.546.285 1.058.831 1.145.546.087 1.058-.285 1.145-.831l.47-2.963c.085-.546-.287-1.058-.833-1.145zm-6.278.623c-.196-.058-.39-.037-.572.018-2.335-.082-2.944-2.3-2.944-2.3-.39-.392-.703-2.123-1.412-1.417l-.003 1.414c-.003 1.414 2.115 3.539 2.115 3.539l-1.417 1.412c-.392.39-.393 1.023-.003 1.414.39.392 1.023.393 1.414.003l.785-.782-.073.242c-.159.529.141 1.086.67 1.246.529.159 1.087-.141 1.246-.67l.862-2.873c.162-.53-.138-1.087-.668-1.246z"/><path fill="#DD2E44" d="M35.009 6.729c-.383-.17-.758-.057-1.05.244-.054.056-4.225 6.306-14.532 4.944-.34-.045 3.139 11.968 3.199 11.962.124-.014 3.07-.368 6.14-2.553 2.818-2.005 6.284-5.991 6.797-13.598.028-.418-.171-.828-.554-.999z"/><path fill="#DD2E44" d="M34.477 21.108c-.204-.336-.59-.56-.979-.471-1.293.295-3.197.543-4.53.453-6.357-.428-9.361-4.129-9.392-4.16-.275-.282.466 11.552.816 11.576 9.194.62 13.862-6.027 14.057-6.31.222-.326.233-.751.028-1.088z"/><path fill="#DD2E44" d="M24.586 19.016c-.371 5.51 1.316 9.861-4.194 9.489-5.51-.371-10.145-4.92-9.774-10.431s14.34-4.568 13.968.942z"/><path fill="#DD2E44" d="M23.257 12.412c-.353 5.235-3.922 9.257-9.156 8.904-5.235-.353-9.193-4.882-8.84-10.117.353-5.235 4.832-8.444 10.067-8.091 4.001.269 8.24 4.683 7.929 9.304z"/><circle fill="#292F33" cx="10.67" cy="8.989" r="2"/><path fill="#A0041E" d="M18.179 16.645s7.63 5.648 12.387-4.459c.396-.842 1.685.793.099 4.162s-8.175 6.44-12.04 1.536c-.815-1.035-.446-1.239-.446-1.239z"/><path fill="#DD2E44" d="M15.327 3.107s6.246.254 7.798-.477.136 2.932-3.262 3.789-4.536-3.312-4.536-3.312z"/><path fill="#DD2E44" d="M17.428 5.788s4.501.136 6.054-.594.136 2.932-3.262 3.789c-3.399.857-2.792-3.195-2.792-3.195z"/></svg></span>
+    <span class="creature ladybug"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path d="M35 21H1c-.552 0-1-.447-1-1s.448-1 1-1h34c.553 0 1 .447 1 1s-.447 1-1 1zm-22.177-2l-.069-.002c-.092-.007-9.214-.714-10.734-8.235-.109-.542.241-1.069.782-1.178.543-.113 1.069.241 1.178.782 1.221 6.044 8.833 6.631 8.91 6.636.551.038.967.515.93 1.066-.036.527-.476.931-.997.931zM3 31c-.142 0-.286-.03-.423-.094-.5-.234-.716-.829-.482-1.33 3.166-6.77 11.038-7.721 11.372-7.758.548-.056 1.042.334 1.103.882.062.548-.332 1.043-.88 1.106-.071.008-7.099.876-9.783 6.617-.171.364-.532.577-.907.577zm19.753-12c-.522 0-.961-.405-.996-.934-.036-.551.381-1.027.931-1.064.081-.005 8.116-.617 9.332-6.636.108-.541.633-.895 1.179-.782.541.109.892.637.782 1.178-1.521 7.525-10.769 8.21-11.162 8.235l-.066.003zm10.248 12c-.377 0-.737-.213-.907-.576-2.694-5.763-10.124-6.609-10.198-6.617-.55-.058-.948-.55-.89-1.099.058-.55.555-.952 1.099-.89.352.037 8.634.983 11.802 7.758.233.501.018 1.096-.482 1.33-.139.064-.282.094-.424.094z" fill="#31373D"/><path fill="#31373D" d="M24.989 7.766c-.069-2.626-1.277-4.216-3.095-5.04C21.961 2.5 22 2.257 22 2c0-1.105-.672-2-1.5-2S19 .895 19 2c0 .015.003.028.003.043C18.675 2.017 18.342 2 18 2s-.675.017-1.003.043c0-.015.003-.028.003-.043 0-1.105-.671-2-1.5-2S14 .895 14 2c0 .257.04.5.106.726-1.817.824-3.025 2.414-3.095 5.04C7.98 9.551 6 12.662 6 17c0 7.159 5.373 16.923 12 16.923 6.628 0 12-9.764 12-16.923 0-4.338-1.98-7.45-5.011-9.234z"/><path fill="#DD2E44" d="M16.001 34.959C9.564 34.364 4.5 28.064 4.5 20.378 4.5 12.693 9.564 9.597 16 9c.33-.03 1-.046 1 2.294v22.541c0 1.171-.669 1.156-.999 1.124zm3.998 0c6.436-.595 11.501-6.895 11.501-14.581C31.5 12.693 26.435 9.597 20 9c-.33-.03-1-.046-1 2.294v22.541c0 1.171.67 1.156.999 1.124z"/><g fill="#31373D"><circle cx="13" cy="15" r="2"/><circle cx="10" cy="22" r="3"/><circle cx="13" cy="29" r="2"/><circle cx="24.5" cy="14.5" r="2.5"/><circle cx="22.5" cy="20.5" r="1.5"/><circle cx="28" cy="23" r="2"/><circle cx="24" cy="29" r="3"/></g></svg></span>
+    <svg viewBox="0 0 1440 200" preserveAspectRatio="none" style="height: 200px;">
+      <path fill="#9ECC8C" d="M0,110 C240,40 420,150 720,100 C1020,50 1200,140 1440,80 L1440,200 L0,200 Z"/>
+      <path fill="#85BD75" d="M0,160 C260,110 520,190 820,150 C1080,116 1260,180 1440,140 L1440,200 L0,200 Z"/>
+    </svg>
+  </div>
+</header>
+
+<main>
+  <section id="how">
+    <h2 data-lang="zh">怎么玩</h2>
+    <h2 data-lang="en" hidden>How it plays</h2>
+    <ol class="steps">
+      <li data-lang="zh">
+        <h3>拍一拍</h3>
+        <p>任意键都行，小手乱拍也完全没问题——小动物立刻从草丛里蹦出来。</p>
+      </li>
+      <li data-lang="en" hidden>
+        <h3>Tap</h3>
+        <p>Any key works, wild banging included. An animal pops out of the grass right away.</p>
+      </li>
+      <li data-lang="zh">
+        <h3>有回应</h3>
+        <p>每个小动物有名字、有声音、有大有小；拍得多了，它们还会排成一队出发。</p>
+      </li>
+      <li data-lang="en" hidden>
+        <h3>The world answers</h3>
+        <p>Every creature has a name, a sound, a size. Keep tapping and they line up and parade off together.</p>
+      </li>
+      <li data-lang="zh">
+        <h3>你来说</h3>
+        <p>「你看，兔子！」屏幕只负责「有回应」这个事实，意义由爸爸妈妈来给。</p>
+      </li>
+      <li data-lang="en" hidden>
+        <h3>You narrate</h3>
+        <p>"Look, a rabbit!" The screen only promises that the world answers. The meaning comes from you.</p>
+      </li>
+    </ol>
+    <figure class="screenshot" data-lang="zh">
+      <img src="assets/playfield-zh.jpg" alt="游戏实际画面：蘑菇丛林场景里蹦出的小动物们" width="1600" height="1000" loading="lazy">
+      <figcaption>实际画面 · 蘑菇丛林场景</figcaption>
+    </figure>
+    <figure class="screenshot" data-lang="en" hidden>
+      <img src="assets/playfield-en.jpg" alt="In-app view: animals popped up in the Mushroom Forest scene" width="1600" height="1000" loading="lazy">
+      <figcaption>In-app view · Mushroom Forest scene</figcaption>
+    </figure>
+  </section>
+
+  <div class="band">
+    <section id="parents">
+      <h2 data-lang="zh">给家长</h2>
+      <h2 data-lang="en" hidden>For parents</h2>
+      <ul class="trust">
+        <li data-lang="zh"><strong>完全离线</strong>：不联网、无广告、无内购，不收集任何数据。</li>
+        <li data-lang="en" hidden><strong>Fully offline</strong>: no network, no ads, no in-app purchases, and no data collection.</li>
+        <li data-lang="zh"><strong>家长门</strong>：设置要长按 P 两秒才打得开，小手乱拍进不去。</li>
+        <li data-lang="en" hidden><strong>Parent gate</strong>: settings open only after holding P for two seconds, safe from little hands.</li>
+        <li data-lang="zh"><strong>幼儿锁定</strong>：全屏运行防误触，长按 Esc 才会退出。</li>
+        <li data-lang="en" hidden><strong>Toddler lock</strong>: runs full screen; only a long hold on Esc quits.</li>
+        <li data-lang="zh"><strong>语音报名字</strong>：系统合成语音，默认关闭——开不开，你说了算。</li>
+        <li data-lang="en" hidden><strong>Spoken names</strong>: uses the built-in macOS voice and is off by default. You decide.</li>
+        <li data-lang="zh"><strong>七种语言</strong>：中文、英语、日语、韩语、西班牙语、法语、德语。</li>
+        <li data-lang="en" hidden><strong>Seven languages</strong>: Chinese, English, Japanese, Korean, Spanish, French, German.</li>
+        <li data-lang="zh"><strong>源码公开</strong>：MIT 协议，每一行代码都可以检查。</li>
+        <li data-lang="en" hidden><strong>Open source</strong>: MIT licensed, every line yours to inspect.</li>
+      </ul>
+    </section>
+  </div>
+
+  <section id="story">
+    <h2 data-lang="zh">为什么会有这个 App</h2>
+    <h2 data-lang="en" hidden>Why this app exists</h2>
+    <div class="story">
+      <p data-lang="zh">这个 App 是一位爸爸为 15 个月大的女儿写的。她特别喜欢拍键盘——这个年龄的乱砸本身就是认真做事：她在用自己仅有的手段，一遍遍验证「我的动作会让世界有回应」。</p>
+      <p data-lang="en" hidden>This app was written by a dad for his 15-month-old daughter. She loves banging on the keyboard — at this age, banging is serious work: with the only means she has, she tests over and over that her actions make the world respond.</p>
+      <p data-lang="zh">于是有了它：拍一下，小动物就蹦出来，爸爸在旁边说：「你看，兔子！」屏幕只负责「世界有回应」这个事实，意义由你来给——孩子负责拍，你负责说。</p>
+      <p data-lang="en" hidden>So he wrote this: tap, and an animal pops up — "Look, a rabbit!" The app offers the fact that the world answers; the meaning comes from you. The child taps, you talk.</p>
+    </div>
+  </section>
+
+  <div class="band">
+    <section id="opensource" class="opensource">
+      <h2 data-lang="zh">开源</h2>
+      <h2 data-lang="en" hidden>Open source</h2>
+      <p data-lang="zh">敲敲小世界以 MIT 协议开源：代码、文档、素材许可全部公开。美术素材来自 Twemoji（CC-BY 4.0），音效来自 OpenGameArt 的作者们（CC0），SVG 渲染由 SwiftDraw（zlib）提供——感谢这些开放社区。</p>
+      <p data-lang="en" hidden>Pat-a-Pet is open source under the MIT license: code, docs and asset licences are all public. Artwork by Twemoji (CC-BY 4.0), sounds by OpenGameArt contributors (CC0), SVG rendering by SwiftDraw (zlib). Thanks to these open communities.</p>
+      <a class="btn btn-ghost" href="https://github.com/F2077/Tappy" data-lang="zh">github.com/F2077/Tappy</a>
+      <a class="btn btn-ghost" href="https://github.com/F2077/Tappy" data-lang="en" hidden>github.com/F2077/Tappy</a>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <p data-lang="zh">© 2026 F2077 · 以 MIT 协议发布 · 为一位小小的拍键盘爱好者而作</p>
+  <p data-lang="en" hidden>© 2026 F2077 · Released under the MIT license · Made for one small keyboard banger</p>
+  <p>Artwork: Twemoji (CC-BY 4.0) · Sounds: OpenGameArt (CC0)</p>
+</footer>
+
+<script>
+(function () {
+  var btn = document.getElementById('langToggle');
+  var current = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  function apply(lang) {
+    current = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+    document.querySelectorAll('[data-lang]').forEach(function (el) {
+      el.hidden = el.dataset.lang !== lang;
+    });
+    btn.textContent = lang === 'zh' ? 'EN' : '中文';
+  }
+  btn.addEventListener('click', function () {
+    apply(current === 'zh' ? 'en' : 'zh');
+  });
+  apply(current);
+})();
+</script>
+</body>
+</html>
