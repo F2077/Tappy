@@ -1,0 +1,246 @@
+{
+  "format": 1,
+  "id": "default",
+  "names": {
+    "en": "Animals",
+    "zh-Hans": "小动物",
+    "ja": "どうぶつ",
+    "ko": "동물",
+    "es": "Animales",
+    "fr": "Animaux",
+    "de": "Tiere"
+  },
+  "entities": [
+    {
+      "id": "cat",
+      "art": "animals/cat.svg",
+      "sound": "sounds/cat.wav",
+      "symbol": "cat.fill",
+      "color": "#FF9500",
+      "systemSound": "Purr",
+      "sizeScale": 1.0,
+      "names": {
+        "en": "Kitty",
+        "zh-Hans": "小猫",
+        "ja": "ねこちゃん",
+        "ko": "고양이",
+        "es": "Gatito",
+        "fr": "Minou",
+        "de": "Miezekatze"
+      }
+    },
+    {
+      "id": "dog",
+      "art": "animals/dog.svg",
+      "sound": "sounds/dog.wav",
+      "symbol": "dog.fill",
+      "color": "#A2845E",
+      "systemSound": "Bark",
+      "sizeScale": 1.2,
+      "names": {
+        "en": "Doggy",
+        "zh-Hans": "小狗",
+        "ja": "わんちゃん",
+        "ko": "강아지",
+        "es": "Perrito",
+        "fr": "Toutou",
+        "de": "Hündchen"
+      }
+    },
+    {
+      "id": "rabbit",
+      "art": "animals/rabbit.svg",
+      "sound": "sounds/rabbit.wav",
+      "symbol": "hare.fill",
+      "color": "#FF2D55",
+      "systemSound": "Pop",
+      "sizeScale": 0.9,
+      "names": {
+        "en": "Bunny",
+        "zh-Hans": "小兔子",
+        "ja": "うさぎちゃん",
+        "ko": "토끼",
+        "es": "Conejito",
+        "fr": "Lapinou",
+        "de": "Häschen"
+      }
+    },
+    {
+      "id": "turtle",
+      "art": "animals/turtle.svg",
+      "sound": "sounds/turtle.wav",
+      "symbol": "tortoise.fill",
+      "color": "#34C759",
+      "systemSound": "Tink",
+      "sizeScale": 0.85,
+      "names": {
+        "en": "Turtle",
+        "zh-Hans": "小乌龟",
+        "ja": "かめさん",
+        "ko": "거북이",
+        "es": "Tortuga",
+        "fr": "Tortue",
+        "de": "Schildkröte"
+      }
+    },
+    {
+      "id": "fish",
+      "art": "animals/fish.svg",
+      "sound": "sounds/fish.wav",
+      "symbol": "fish.fill",
+      "color": "#007AFF",
+      "systemSound": "Blow",
+      "sizeScale": 0.65,
+      "names": {
+        "en": "Fishy",
+        "zh-Hans": "小鱼",
+        "ja": "おさかな",
+        "ko": "물고기",
+        "es": "Pececito",
+        "fr": "Poisson",
+        "de": "Fisch"
+      }
+    },
+    {
+      "id": "bird",
+      "art": "animals/bird.svg",
+      "sound": "sounds/bird.wav",
+      "symbol": "bird.fill",
+      "color": "#32ADE6",
+      "systemSound": "Ping",
+      "sizeScale": 0.7,
+      "names": {
+        "en": "Birdie",
+        "zh-Hans": "小鸟",
+        "ja": "ことり",
+        "ko": "새",
+        "es": "Pajarito",
+        "fr": "Oiseau",
+        "de": "Vögelchen"
+      }
+    },
+    {
+      "id": "ant",
+      "art": "animals/ant.svg",
+      "sound": "sounds/ant.wav",
+      "symbol": "ant.fill",
+      "color": "#FF3B30",
+      "systemSound": "Morse",
+      "sizeScale": 0.4,
+      "names": {
+        "en": "Ant",
+        "zh-Hans": "小蚂蚁",
+        "ja": "ありさん",
+        "ko": "개미",
+        "es": "Hormiga",
+        "fr": "Fourmi",
+        "de": "Ameise"
+      }
+    },
+    {
+      "id": "ladybug",
+      "art": "animals/ladybug.svg",
+      "sound": "sounds/ladybug.wav",
+      "symbol": "ladybug.fill",
+      "color": "#FF3B30",
+      "systemSound": "Glass",
+      "sizeScale": 0.5,
+      "names": {
+        "en": "Ladybug",
+        "zh-Hans": "小瓢虫",
+        "ja": "てんとうむし",
+        "ko": "무당벌레",
+        "es": "Mariquita",
+        "fr": "Coccinelle",
+        "de": "Marienkäfer"
+      }
+    },
+    {
+      "id": "lizard",
+      "art": "animals/lizard.svg",
+      "sound": "sounds/lizard.wav",
+      "symbol": "lizard.fill",
+      "color": "#00C7BE",
+      "systemSound": "Frog",
+      "sizeScale": 0.8,
+      "names": {
+        "en": "Lizard",
+        "zh-Hans": "小蜥蜴",
+        "ja": "とかげ",
+        "ko": "도마뱀",
+        "es": "Lagartija",
+        "fr": "Lézard",
+        "de": "Echse"
+      }
+    },
+    {
+      "id": "bear",
+      "art": "animals/bear.svg",
+      "sound": "sounds/bear.wav",
+      "symbol": "teddybear.fill",
+      "color": "#5856D6",
+      "systemSound": "Funk",
+      "sizeScale": 1.5,
+      "names": {
+        "en": "Bear",
+        "zh-Hans": "小熊",
+        "ja": "くまさん",
+        "ko": "곰",
+        "es": "Osito",
+        "fr": "Nounours",
+        "de": "Teddybär"
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "id": "mushroomForest",
+      "renderer": "mushroomForest",
+      "idleAction": "hop",
+      "accentSound": "sounds/accent-forest.wav",
+      "names": {
+        "en": "Mushroom Forest",
+        "zh-Hans": "蘑菇丛林",
+        "ja": "きのこの森",
+        "ko": "버섯 숲",
+        "es": "Bosque de setas",
+        "fr": "Forêt aux champignons",
+        "de": "Pilzwald"
+      },
+      "parade": {
+        "style": "lanes",
+        "speed": 0.07,
+        "laneY": [
+          0.7,
+          0.86
+        ],
+        "amplitude": 26,
+        "waveLength": 45
+      }
+    },
+    {
+      "id": "mistyMeadow",
+      "renderer": "mistyMeadow",
+      "idleAction": "sway",
+      "accentSound": "sounds/accent-meadow.wav",
+      "names": {
+        "en": "Misty Meadow",
+        "zh-Hans": "朝雾草原",
+        "ja": "朝霧の草原",
+        "ko": "아침 안개 초원",
+        "es": "Pradera brumosa",
+        "fr": "Prairie brumeuse",
+        "de": "Nebelwiese"
+      },
+      "parade": {
+        "style": "graze",
+        "speed": 0.04,
+        "laneY": [
+          0.8
+        ],
+        "amplitude": 6,
+        "waveLength": 60
+      }
+    }
+  ]
+}

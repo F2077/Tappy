@@ -1,0 +1,13 @@
+Sound credits:
+
+- cat.wav  — "Kitten Mew" by squeakybunny, CC0
+  https://opengameart.org/content/kitten-mew
+- dog.wav  — "Dog sounds" (Dog Bark.wav), CC0
+  https://opengameart.org/content/dog-sounds
+- bird.wav — trimmed from "Ambient Bird Sounds" by isaiah658, CC0
+  https://opengameart.org/content/ambient-bird-sounds
+
+The remaining sounds (rabbit, turtle, fish, ant, ladybug, lizard,
+bear, and the accent-forest / accent-meadow scene accents) are
+synthesized by Scripts/synth-sounds.swift in this repository
+and are released with the project.

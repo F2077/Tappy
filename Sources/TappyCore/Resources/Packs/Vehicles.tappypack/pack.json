@@ -1,0 +1,321 @@
+{
+  "format": 1,
+  "id": "vehicles",
+  "names": {
+    "en": "Vehicles",
+    "zh-Hans": "车车",
+    "ja": "のりもの",
+    "ko": "탈것",
+    "es": "Vehículos",
+    "fr": "Véhicules",
+    "de": "Fahrzeuge"
+  },
+  "entities": [
+    {
+      "id": "car",
+      "art": "art/car.svg",
+      "sound": "sounds/car.wav",
+      "symbol": "car.fill",
+      "color": "#FF9500",
+      "systemSound": "Pop",
+      "sizeScale": 1.1,
+      "names": {
+        "en": "Car",
+        "zh-Hans": "小汽车",
+        "ja": "くるま",
+        "ko": "자동차",
+        "es": "Coche",
+        "fr": "Voiture",
+        "de": "Auto"
+      }
+    },
+    {
+      "id": "taxi",
+      "art": "art/taxi.svg",
+      "sound": "sounds/taxi.wav",
+      "symbol": "car.fill",
+      "color": "#FFCC00",
+      "systemSound": "Ping",
+      "sizeScale": 1.1,
+      "names": {
+        "en": "Taxi",
+        "zh-Hans": "出租车",
+        "ja": "タクシー",
+        "ko": "택시",
+        "es": "Taxi",
+        "fr": "Taxi",
+        "de": "Taxi"
+      }
+    },
+    {
+      "id": "bus",
+      "art": "art/bus.svg",
+      "sound": "sounds/bus.wav",
+      "symbol": "bus.fill",
+      "color": "#34C759",
+      "systemSound": "Tink",
+      "sizeScale": 1.45,
+      "names": {
+        "en": "Bus",
+        "zh-Hans": "公交车",
+        "ja": "バス",
+        "ko": "버스",
+        "es": "Autobús",
+        "fr": "Bus",
+        "de": "Bus"
+      }
+    },
+    {
+      "id": "truck",
+      "art": "art/truck.svg",
+      "sound": "sounds/truck.wav",
+      "symbol": "truck.box.fill",
+      "color": "#8E8E93",
+      "systemSound": "Funk",
+      "sizeScale": 1.5,
+      "names": {
+        "en": "Truck",
+        "zh-Hans": "大卡车",
+        "ja": "トラック",
+        "ko": "트럭",
+        "es": "Camión",
+        "fr": "Camion",
+        "de": "Lkw"
+      }
+    },
+    {
+      "id": "tractor",
+      "art": "art/tractor.svg",
+      "sound": "sounds/tractor.wav",
+      "symbol": "gearshape.fill",
+      "color": "#30D158",
+      "systemSound": "Morse",
+      "sizeScale": 1.35,
+      "names": {
+        "en": "Tractor",
+        "zh-Hans": "拖拉机",
+        "ja": "トラクター",
+        "ko": "트랙터",
+        "es": "Tractor",
+        "fr": "Tracteur",
+        "de": "Traktor"
+      }
+    },
+    {
+      "id": "fireEngine",
+      "art": "art/fireEngine.svg",
+      "sound": "sounds/fireEngine.wav",
+      "symbol": "light.beacon.max.fill",
+      "color": "#FF3B30",
+      "systemSound": "Basso",
+      "sizeScale": 1.4,
+      "names": {
+        "en": "Fire Truck",
+        "zh-Hans": "消防车",
+        "ja": "しょうぼうしゃ",
+        "ko": "소방차",
+        "es": "Camión de bomberos",
+        "fr": "Camion de pompiers",
+        "de": "Feuerwehrauto"
+      }
+    },
+    {
+      "id": "ambulance",
+      "art": "art/ambulance.svg",
+      "sound": "sounds/ambulance.wav",
+      "symbol": "cross.case.fill",
+      "color": "#64D2FF",
+      "systemSound": "Ping",
+      "sizeScale": 1.3,
+      "names": {
+        "en": "Ambulance",
+        "zh-Hans": "救护车",
+        "ja": "きゅうきゅうしゃ",
+        "ko": "구급차",
+        "es": "Ambulancia",
+        "fr": "Ambulance",
+        "de": "Krankenwagen"
+      }
+    },
+    {
+      "id": "policeCar",
+      "art": "art/policeCar.svg",
+      "sound": "sounds/policeCar.wav",
+      "symbol": "shield.fill",
+      "color": "#007AFF",
+      "systemSound": "Hero",
+      "sizeScale": 1.25,
+      "names": {
+        "en": "Police Car",
+        "zh-Hans": "警车",
+        "ja": "パトカー",
+        "ko": "경찰차",
+        "es": "Coche de policía",
+        "fr": "Voiture de police",
+        "de": "Polizeiauto"
+      }
+    },
+    {
+      "id": "airplane",
+      "art": "art/airplane.svg",
+      "sound": "sounds/airplane.wav",
+      "symbol": "airplane",
+      "color": "#A2845E",
+      "systemSound": "Blow",
+      "sizeScale": 1.3,
+      "names": {
+        "en": "Airplane",
+        "zh-Hans": "飞机",
+        "ja": "ひこうき",
+        "ko": "비행기",
+        "es": "Avión",
+        "fr": "Avion",
+        "de": "Flugzeug"
+      }
+    },
+    {
+      "id": "rocket",
+      "art": "art/rocket.svg",
+      "sound": "sounds/rocket.wav",
+      "symbol": "paperplane.fill",
+      "color": "#FF6B35",
+      "systemSound": "Submerge",
+      "sizeScale": 1.0,
+      "names": {
+        "en": "Rocket",
+        "zh-Hans": "火箭",
+        "ja": "ロケット",
+        "ko": "로켓",
+        "es": "Cohete",
+        "fr": "Fusée",
+        "de": "Rakete"
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "id": "buildingSite",
+      "idleAction": "sway",
+      "accentSound": "sounds/accent-site.wav",
+      "names": {
+        "en": "Work Site",
+        "zh-Hans": "建筑工地",
+        "ja": "工事現場",
+        "ko": "공사장",
+        "es": "Obra",
+        "fr": "Chantier",
+        "de": "Baustelle"
+      },
+      "scene": {
+        "gradient": [
+          "#87CEEB",
+          "#FFE8B4"
+        ],
+        "ground": {
+          "color": "#C4A46C",
+          "height": 0.16
+        },
+        "decorations": [
+          {
+            "art": "art/sun.svg",
+            "x": 0.86,
+            "y": 0.1,
+            "scale": 0.9,
+            "motion": "pulse"
+          },
+          {
+            "art": "art/cloud.svg",
+            "x": 0.22,
+            "y": 0.18,
+            "scale": 1.0,
+            "motion": "drift"
+          },
+          {
+            "art": "art/tree.svg",
+            "x": 0.07,
+            "y": 0.8,
+            "scale": 1.0,
+            "motion": "sway"
+          },
+          {
+            "art": "art/tree.svg",
+            "x": 0.93,
+            "y": 0.78,
+            "scale": 0.8,
+            "motion": "sway"
+          }
+        ]
+      },
+      "parade": {
+        "style": "lanes",
+        "speed": 0.07,
+        "laneY": [
+          0.7,
+          0.86
+        ],
+        "amplitude": 22,
+        "waveLength": 50
+      }
+    },
+    {
+      "id": "nightLaunch",
+      "idleAction": "sway",
+      "accentSound": "sounds/accent-night.wav",
+      "names": {
+        "en": "Night Launch",
+        "zh-Hans": "夜间发射",
+        "ja": "夜の発射",
+        "ko": "야간 발사",
+        "es": "Lanzamiento nocturno",
+        "fr": "Lancement nocturne",
+        "de": "Nachtstart"
+      },
+      "scene": {
+        "gradient": [
+          "#0B1026",
+          "#283A6D"
+        ],
+        "ground": {
+          "color": "#243B2F",
+          "height": 0.14
+        },
+        "decorations": [
+          {
+            "art": "art/cloud.svg",
+            "x": 0.72,
+            "y": 0.22,
+            "scale": 0.9,
+            "motion": "drift"
+          },
+          {
+            "art": "art/tree.svg",
+            "x": 0.1,
+            "y": 0.8,
+            "scale": 0.9,
+            "motion": "sway"
+          },
+          {
+            "art": "art/tree.svg",
+            "x": 0.88,
+            "y": 0.82,
+            "scale": 0.7,
+            "motion": "sway"
+          }
+        ],
+        "particles": {
+          "kind": "fireflies",
+          "count": 12
+        }
+      },
+      "parade": {
+        "style": "graze",
+        "speed": 0.05,
+        "laneY": [
+          0.8
+        ],
+        "amplitude": 8,
+        "waveLength": 60
+      }
+    }
+  ]
+}

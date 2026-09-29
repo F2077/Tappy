@@ -1,0 +1,7 @@
+Sound credits:
+
+All sounds in this directory (car, taxi, bus, truck, tractor,
+fireEngine, ambulance, policeCar, airplane, rocket, and the
+accent-night / accent-site scene accents) are synthesized by
+Scripts/synth-vehicle-sounds.swift in this repository and are
+released with the project. No third-party recordings are used.

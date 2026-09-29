@@ -1,0 +1,16 @@
+The animal artwork in this directory comes from Twemoji
+(https://github.com/jdecked/twemoji), copyright 2019-2024 Twitter, Inc
+and other contributors, licensed under CC-BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
+
+Files (original names by Unicode codepoint):
+- cat.svg     1f431.svg  (cat face)
+- dog.svg     1f436.svg  (dog face)
+- rabbit.svg  1f430.svg  (rabbit face)
+- turtle.svg  1f422.svg  (turtle)
+- fish.svg    1f41f.svg  (fish)
+- bird.svg    1f426.svg  (bird)
+- ant.svg     1f41c.svg  (ant)
+- ladybug.svg 1f41e.svg  (lady beetle)
+- lizard.svg  1f98e.svg  (lizard)
+- bear.svg    1f43b.svg  (bear)

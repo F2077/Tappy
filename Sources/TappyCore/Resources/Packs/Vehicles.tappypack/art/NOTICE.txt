@@ -1,0 +1,19 @@
+The artwork in this directory comes from Twemoji
+(https://github.com/jdecked/twemoji), copyright 2019-2024 Twitter, Inc
+and other contributors, licensed under CC-BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
+
+Files (original names by Unicode codepoint):
+- car.svg        1f697.svg  (automobile)
+- taxi.svg       1f695.svg  (taxi)
+- bus.svg        1f68c.svg  (bus)
+- truck.svg      1f69a.svg  (delivery truck)
+- tractor.svg    1f69c.svg  (tractor)
+- fireEngine.svg 1f692.svg  (fire engine)
+- ambulance.svg  1f691.svg  (ambulance)
+- policeCar.svg  1f693.svg  (police car)
+- airplane.svg   2708.svg   (airplane)
+- rocket.svg     1f680.svg  (rocket)
+
+Scenery decorations (sun.svg, cloud.svg, tree.svg) are also Twemoji
+(2600.svg, 2601.svg, 1f333.svg).
