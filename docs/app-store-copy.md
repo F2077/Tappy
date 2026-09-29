@@ -97,7 +97,8 @@ OpenGameArt.org contributors (CC0). SVG rendering by SwiftDraw
 
 - **SKU**：laptap-macos（建记录时已填）
 - **Bundle ID**：Tappy - com.github.f2077.tappy
-- **主要类别**：儿童 → 5 岁及以下；次要类别：教育
+- **主要类别**：教育（Education）。macOS 没有「儿童」类别（iOS 专有，
+  `LSApplicationCategoryType` 只接受 education）；次要类别可空
 - **支持 URL**：`https://github.com/F2077/Tappy`；**营销 URL**：可空
 - **隐私政策 URL**：`https://github.com/F2077/Tappy/blob/main/PRIVACY.md`（必填）
 - **年龄分级**：4+ · 面向儿童 · 5 岁及以下（已配置）

@@ -34,9 +34,10 @@ OpenGameArt.org contributors (CC0). SVG rendering by SwiftDraw
 - [ ] **隐私清单**：App 不联网、不收集数据，App Store Connect 隐私
       问卷全选"不收集"；未触碰 required-reason API，无需
       `PrivacyInfo.xcprivacy`
-- [x] **儿童类别**：主要类别"儿童 → 5 岁及以下"，次要类别"教育"；
-      承诺不含第三方广告/分析（当前代码满足），家长门（设置长按 P
-      两秒）符合儿童类别"家长内容隔离"要求
+- [x] **类别**：主要类别"教育"——macOS 无"儿童"类别（iOS 专有，
+      上传校验 90249 实测拒绝 `public.app-category.kids`）；年龄分级
+      4+ 不变。承诺不含第三方广告/分析（当前代码满足），家长门
+      （设置长按 P 两秒）符合"家长内容隔离"要求
 - [x] **截图与预览**：`Scripts/capture-screens.sh` 生成中英两套
       Retina 截图（`build/screens/`，2880×1800 无 alpha）
 - [x] **开源联动**：源码 MIT 公开于 GitHub，商店页支持 URL 链到
