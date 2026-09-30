@@ -30,7 +30,7 @@ OpenGameArt.org contributors (CC0). SVG rendering by SwiftDraw
 ## 上架前自查
 
 - [x] **商标**："Tappy" 已有同名应用 → 商店名定为 **Pat-a-Pet**
-      （敲敲小世界），仓库与二进制保持 Tappy 不变
+      （拍拍小世界），仓库与二进制保持 Tappy 不变
 - [ ] **隐私清单**：App 不联网、不收集数据，App Store Connect 隐私
       问卷全选"不收集"；未触碰 required-reason API，无需
       `PrivacyInfo.xcprivacy`

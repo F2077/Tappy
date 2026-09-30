@@ -10,13 +10,13 @@
 
 ## 简体中文（zh-Hans，首发主语言之外的第二本地化）
 
-**名称**：敲敲小世界
+**名称**：拍拍小世界
 **副标题**：爸爸写给女儿的小世界
 **宣传文本**（170 字内，可随时更新）：拍一下，世界就回应。
 
 **描述**：
 
-敲敲小世界（Pat-a-Pet）是一款为幼儿设计的启蒙互动应用：拍一拍键盘、点一点鼠标，屏幕上就蹦出一只小动物或一辆小车，带着它的名字和叫声。
+拍拍小世界（Pat-a-Pet）是一款为幼儿设计的启蒙互动应用：拍一拍键盘、点一点鼠标，屏幕上就蹦出一只小动物或一辆小车，带着它的名字和叫声。
 
 它起源于一位爸爸为 15 个月大的女儿写的小程序：她拍一下，世界就回应一下；名字和故事，由爸爸妈妈来讲。
 
@@ -47,7 +47,7 @@
 
 **Description**:
 
-Pat-a-Pet (敲敲小世界) is an early-learning app for toddlers: tap the
+Pat-a-Pet (拍拍小世界) is an early-learning app for toddlers: tap the
 keyboard or click the mouse, and an animal or vehicle pops up with its
 name and real sounds.
 

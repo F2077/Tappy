@@ -10,7 +10,7 @@ things pop up with sounds. Tappy is a generic engine — all content
 from **resource packs**, so new themes ship as data, not code.
 See `docs/resource-packs.md` (中文) for the pack format.
 
-> On the App Store the app is called **Pat-a-Pet** (敲敲小世界): pat is
+> On the App Store the app is called **Pat-a-Pet** (拍拍小世界): pat is
 > the gentle tap — on a pet, on a child's head — and a nod to
 > pat-a-cake, the oldest parent-baby clapping game there is. The name
 > "Tappy" was already taken, and this one tells the story better

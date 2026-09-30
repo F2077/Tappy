@@ -11,7 +11,7 @@ Questions or issues: please open an issue on
 
 **中文**
 
-敲敲小世界（Pat-a-Pet）完全离线运行，不收集、不传输、不存储任何
+拍拍小世界（Pat-a-Pet）完全离线运行，不收集、不传输、不存储任何
 用户数据，不含广告、分析工具或第三方追踪。所有设置仅保存在本机。
 
 如有问题或建议，请在 [GitHub Issues](https://github.com/F2077/Tappy/issues)
