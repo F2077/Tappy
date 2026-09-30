@@ -34,3 +34,16 @@
 # Distribution provisioning profile of type "Mac App Store Connect".
 #: "${TAPPY_APPSTORE_PROFILE:=$HOME/Documents/Tappy_macOS_App_Store.mobileprovision}"
 
+# --- Direct distribution (make release-dmg, GitHub Releases) ---
+
+# "Developer ID Application" cert, listed by:
+#   security find-identity -v -p codesigning
+#: "${TAPPY_DEVELOPER_ID_IDENTITY:=Developer ID Application: Your Name (XXXXXXXXXX)}"
+
+# App Store Connect API key for notarytool (Users and Access →
+# Integrations → App Store Connect API). The .p8 can only be
+# downloaded once; keep it outside the repo.
+#: "${TAPPY_NOTARY_KEY:=$HOME/Documents/AuthKey_XXXXXXXXXX.p8}"
+#: "${TAPPY_NOTARY_KEY_ID:=XXXXXXXXXX}"
+#: "${TAPPY_NOTARY_ISSUER_ID:=00000000-0000-0000-0000-000000000000}"
+

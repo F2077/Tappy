@@ -1,4 +1,4 @@
-.PHONY: run test smoke smoke-l10n build app dmg pkg clean
+.PHONY: run test smoke smoke-l10n build app dmg pkg release-dmg clean
 
 run: patch
 	swift run Tappy
@@ -40,6 +40,11 @@ dmg: app
 # signing config; see docs/signing.md).
 pkg: build
 	./Scripts/make-pkg.sh
+
+# GitHub Release DMG: Developer ID signed + notarized + stapled, so
+# Gatekeeper opens it on any Mac (see docs/release.md).
+release-dmg: build
+	./Scripts/notarize-dmg.sh
 
 clean:
 	rm -rf .build build
