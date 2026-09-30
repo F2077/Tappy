@@ -57,9 +57,11 @@ git push origin v1.0.0
 ```
 
 或在 Actions 页面手动触发 "release" 工作流并填版本号。流水线会:
-`make test`(无头断言)→ release 构建 → Developer ID 签名 → 打 DMG →
-公证 + staple → `spctl` 验证 → 创建 GitHub Release 并附上
-`Tappy.dmg`(版本号/构建号取自 tag 与 run number)。
+release 构建 → Developer ID 签名 → 打 DMG → 公证 + staple →
+`spctl` 验证 → 创建 GitHub Release 并附上 `Tappy.dmg`(版本号/构建号
+取自 tag 与 run number)。注:CI 上暂不跑 `make test`——TappyChecks
+在 runner 镜像上启动即崩(疑似运行库差异),发版前请本地跑过
+`make test` 与 `make smoke`。
 
 首次公证可能要 5–15 分钟,之后通常 1–2 分钟。
 

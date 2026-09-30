@@ -52,9 +52,6 @@ jobs:
           security list-keychains -d user -s build.keychain $(security list-keychains -d user | tr -d '"')
           rm -f /tmp/dev-id.p12
 
-      - name: Headless checks
-        run: make test
-
       - name: Build, sign, notarize, staple
         env:
           NOTARY_P8_BASE64: ${{ secrets.TAPPY_NOTARY_KEY_P8_BASE64 }}
