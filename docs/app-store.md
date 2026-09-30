@@ -36,7 +36,7 @@ OpenGameArt.org contributors (CC0). SVG rendering by SwiftDraw
       `PrivacyInfo.xcprivacy`
 - [x] **类别**：主要类别"教育"——macOS 无"儿童"类别（iOS 专有，
       上传校验 90249 实测拒绝 `public.app-category.kids`）；年龄分级
-      4+ 不变。承诺不含第三方广告/分析（当前代码满足），家长门
+      4+ 不变。承诺不含第三方广告/分析（当前代码满足），家长设置
       （设置长按 P 两秒）符合"家长内容隔离"要求
 - [x] **截图与预览**：`Scripts/capture-screens.sh` 生成中英两套
       Retina 截图（`build/screens/`，2880×1800 无 alpha）
