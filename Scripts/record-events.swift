@@ -4,8 +4,9 @@
 // lengthened so viewers can follow.
 //
 // Usage:
-//   swift record-events.swift --find-window <pid>   → prints window id
-//   swift record-events.swift <pid>                 → runs the demo
+//   swift record-events.swift --find-window <pid>     → prints window id
+//   swift record-events.swift --window-bounds <pid>    → prints "x,y,w,h"
+//   swift record-events.swift <pid>                    → runs the demo
 
 import AppKit
 import CoreGraphics
@@ -17,10 +18,11 @@ func fail(_ code: Int32, _ message: String) -> Never {
 
 let args = CommandLine.arguments
 guard args.count >= 2 else {
-    fail(1, "usage: swift record-events.swift [--find-window] <pid>")
+    fail(1, "usage: swift record-events.swift [--find-window|--window-bounds] <pid>")
 }
 let findWindowMode = args[1] == "--find-window"
-let pidString = findWindowMode ? args[2] : args[1]
+let boundsMode = args[1] == "--window-bounds"
+let pidString = (findWindowMode || boundsMode) ? args[2] : args[1]
 guard let pid = Int32(pidString) else {
     fail(1, "invalid pid: \(pidString)")
 }
@@ -53,6 +55,15 @@ if CommandLine.arguments[1] == "--find-window" {
         usleep(500_000)
     }
     fail(1, "no on-screen window for pid \(pid)")
+}
+
+// --window-bounds mode: print "x,y,w,h" for ffmpeg crop.
+if boundsMode {
+    guard let (_, bounds) = findWindowID(for: pid) else {
+        fail(1, "no on-screen window for pid \(pid)")
+    }
+    print("\(Int(bounds.origin.x)),\(Int(bounds.origin.y)),\(Int(bounds.width)),\(Int(bounds.height))")
+    exit(0)
 }
 
 // Demo mode: resolve the window once for click coordinates.
@@ -145,20 +156,37 @@ usleep(longPause)
 key(17)
 usleep(longPause)
 
-// 10. Hold Esc: clean exit (also ends the smoke-mode timer).
+// 10. Print the timestamp when we are about to send Esc, so
+// record-demo.sh can trim the recording to end right here
+// (before the desktop shows through).
+print("EXIT_AT=\(Date().timeIntervalSince1970)")
+
+// 11. Hold Esc: clean exit (also ends the smoke-mode timer).
 key(53, hold: 1_700_000)
 
 // MARK: - AX helper
+
+func findElementByIdentifier(_ element: AXUIElement, depth: Int, id: String) -> AXUIElement? {
+    guard depth < 12 else { return nil }
+    var idRef: AnyObject?
+    if AXUIElementCopyAttributeValue(element, kAXIdentifierAttribute as CFString, &idRef) == .success,
+       (idRef as? String) == id {
+        return element
+    }
+    var childrenRef: AnyObject?
+    guard AXUIElementCopyAttributeValue(element, kAXChildrenAttribute as CFString, &childrenRef) == .success,
+          let children = childrenRef as? [AXUIElement] else { return nil }
+    return children.lazy.compactMap { findElementByIdentifier($0, depth: depth + 1, id: id) }.first
+}
 
 func findDoneButton(_ element: AXUIElement, depth: Int) -> AXUIElement? {
     guard depth < 12 else { return nil }
     var roleRef: AnyObject?
     if AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &roleRef) == .success,
        (roleRef as? String) == (kAXButtonRole as String) {
-        var titleRef: AnyObject?, descRef: AnyObject?, idRef: AnyObject?
+        var titleRef: AnyObject?, descRef: AnyObject?
         AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &titleRef)
         AXUIElementCopyAttributeValue(element, kAXDescriptionAttribute as CFString, &descRef)
-        AXUIElementCopyAttributeValue(element, kAXIdentifierAttribute as CFString, &idRef)
         let title = (titleRef as? String) ?? ""
         let desc = (descRef as? String) ?? ""
         if doneTitles.contains(title) || doneTitles.contains(desc) {

@@ -9,15 +9,9 @@ import TappyCore
 /// the real path (holding Escape). Sounds stay muted via the guard in
 /// PlayfieldView.syncSettings. Absent the env var, none of this exists
 /// at runtime.
-///
-/// TAPPY_SMOKE_FULLSCREEN=1 expands the window to cover the main
-/// screen's visible frame — used by Scripts/record-demo.sh so the
-/// App Review video shows the app filling the display without the
-/// kiosk taking over process switching.
 @MainActor
 enum SmokeMode {
     static let isActive = ProcessInfo.processInfo.environment["TAPPY_SMOKE"] == "1"
-    static let wantsFullscreen = ProcessInfo.processInfo.environment["TAPPY_SMOKE_FULLSCREEN"] == "1"
 
     nonisolated private static let logPath = ProcessInfo.processInfo.environment["TAPPY_SMOKE_LOG"]
 
