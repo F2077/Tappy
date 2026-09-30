@@ -1,9 +1,8 @@
 #!/bin/bash
-# Records a demo video for App Store review: launches Tappy in
-# smoke mode (windowed, sounds muted), drives it with synthetic
-# CGEvents, records the full screen with ffmpeg, then crops to
-# the app window's bounds.
-# Output: build/Tappy-demo.mov
+# Records a demo video for App Store review: launches Tappy at
+# 960x540 logical points (= 1920x1080 physical pixels on Retina),
+# records the full screen with ffmpeg, then crops 1:1 to the app
+# window. Output is exactly 1920x1080, no scaling, no black bars.
 #
 # Needs Accessibility trust (same as make smoke) and Screen
 # Recording permission for the terminal app.
@@ -19,8 +18,8 @@ RAW="build/Tappy-demo-raw.mov"
 OUT="build/Tappy-demo.mov"
 rm -f "$RAW" "$OUT"
 
-echo "Launching Tappy in demo mode…"
-TAPPY_SMOKE=1 TAPPY_SMOKE_SECONDS=45 .build/debug/Tappy &
+echo "Launching Tappy at 960x540 (= 1920x1080 physical)…"
+TAPPY_SMOKE=1 TAPPY_SMOKE_SECONDS=45 TAPPY_WINDOW=960x540 .build/debug/Tappy &
 PID=$!
 trap 'kill "$PID" 2>/dev/null; exit 1' INT TERM
 
@@ -36,7 +35,7 @@ echo "Window id: $WIN"
 # Get window bounds as "x,y,w,h" for ffmpeg crop.
 BOUNDS=$(swift "$RECORD_EVENTS" --window-bounds "$PID" 2>/dev/null)
 [ -n "$BOUNDS" ] || { echo "error: no window bounds" >&2; kill "$PID"; exit 1; }
-echo "Window bounds: $BOUNDS"
+echo "Window bounds: $BOUNDS (logical points)"
 
 # Start ffmpeg screen recording (no audio, no cursor).
 echo "Recording full screen to $RAW …"
@@ -79,20 +78,20 @@ if [ -n "$EXIT_AT" ]; then
 fi
 rm -f "$EVENTS_OUT"
 
-# Crop to the app window and trim to the Esc moment. Bounds are
-# "x,y,w,h" in points; ffmpeg crop uses pixels, and on Retina the
-# screen recording is at 2x scale, so multiply by 2.
+# Crop 1:1 to the app window. Bounds are logical points; ffmpeg
+# records physical pixels on Retina, so multiply by 2. No scaling,
+# no padding — the window is exactly 1920x1080 physical pixels.
 X=$(echo "$BOUNDS" | cut -d, -f1)
 Y=$(echo "$BOUNDS" | cut -d, -f2)
 W=$(echo "$BOUNDS" | cut -d, -f3)
 H=$(echo "$BOUNDS" | cut -d, -f4)
-echo "Cropping to ${W}x${H} at (${X},${Y}) …"
+echo "Cropping 1:1 to ${W}x${H} logical = $((W*2))x$((H*2)) physical …"
 if [ -n "$TRIM_DUR" ]; then
-    ffmpeg -i "$RAW" -t "$TRIM_DUR" -vf "crop=$W*2:$H*2:$X*2:$Y*2" -c:v libx264 -preset medium -crf 20 -y "$OUT" 2>&1 | tail -3
+    ffmpeg -i "$RAW" -t "$TRIM_DUR" -vf "crop=$((W*2)):$((H*2)):$((X*2)):$((Y*2))" -c:v libx264 -preset medium -crf 20 -y "$OUT" 2>&1 | tail -3
 else
-    ffmpeg -i "$RAW" -vf "crop=$W*2:$H*2:$X*2:$Y*2" -c:v libx264 -preset medium -crf 20 -y "$OUT" 2>&1 | tail -3
+    ffmpeg -i "$RAW" -vf "crop=$((W*2)):$((H*2)):$((X*2)):$((Y*2))" -c:v libx264 -preset medium -crf 20 -y "$OUT" 2>&1 | tail -3
 fi
 rm -f "$RAW"
 
 echo "Done: $OUT ($(ls -lh "$OUT" | awk '{print $5}'))"
-echo "Duration target: 30–40 s. Trim in QuickTime if needed."
+echo "Dimensions: $(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$OUT" 2>/dev/null || echo 'unknown')"
