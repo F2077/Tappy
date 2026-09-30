@@ -57,6 +57,9 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.menu)
                     .frame(maxWidth: 220)
+                    // Demo-recording harness presses this via AX; a
+                    // stable identifier avoids localized-label lookup.
+                    .accessibilityIdentifier("settings.theme")
                 }
 
                 // Scene picker (active theme only).

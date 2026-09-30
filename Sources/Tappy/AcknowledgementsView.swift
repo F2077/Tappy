@@ -70,7 +70,10 @@ struct AcknowledgementsView: View {
                     .accessibilityIdentifier("about.done")
             }
             .padding(28)
-            .frame(width: 560, height: 640)
+            .frame(width: 560)
+            // Flexible height: shrinks to fit small windows (the 960×540
+            // demo-recording window) instead of overflowing past them.
+            .frame(maxHeight: 640)
             .background(.regularMaterial, in: .rect(cornerRadius: 16))
         }
     }

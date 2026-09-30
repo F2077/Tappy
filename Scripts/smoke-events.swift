@@ -177,6 +177,41 @@ func verifyButton(identifier: String, _ name: String) {
     fail(1, "\(name) not found via Accessibility")
 }
 
+/// Depth-first search for an AXStaticText whose value contains the
+/// needle. Separate from findElement because SwiftUI static texts
+/// carry their content in AXValue, not AXTitle/AXDescription.
+func findStaticText(_ element: AXUIElement, depth: Int, containing needle: String) -> Bool {
+    guard depth < 12 else { return false }
+    var roleRef: AnyObject?
+    if AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &roleRef) == .success,
+       (roleRef as? String) == (kAXStaticTextRole as String) {
+        var valueRef: AnyObject?
+        AXUIElementCopyAttributeValue(element, kAXValueAttribute as CFString, &valueRef)
+        if let value = valueRef as? String, value.contains(needle) { return true }
+    }
+    var childrenRef: AnyObject?
+    guard AXUIElementCopyAttributeValue(element, kAXChildrenAttribute as CFString, &childrenRef) == .success,
+          let children = childrenRef as? [AXUIElement] else { return false }
+    return children.contains { findStaticText($0, depth: depth + 1, containing: needle) }
+}
+
+/// Polls the AX tree for a static text containing the needle; failure
+/// exits 1, same contract as verifyButton.
+func verifyText(containing needle: String, _ name: String) {
+    let app = AXUIElementCreateApplication(pid)
+    for _ in 0..<12 {
+        var windowsRef: AnyObject?
+        if AXUIElementCopyAttributeValue(app, kAXWindowsAttribute as CFString, &windowsRef) == .success,
+           let windows = windowsRef as? [AXUIElement] {
+            for window in windows where findStaticText(window, depth: 0, containing: needle) {
+                return
+            }
+        }
+        usleep(500_000)
+    }
+    fail(1, "\(name) not found via Accessibility")
+}
+
 /// Depth-first search over ALL elements (any role) matching a predicate
 /// on (title, description, identifier).
 func findElement(_ element: AXUIElement, depth: Int,
@@ -214,12 +249,23 @@ func capture(_ path: String) {
 //     windowed mode, and flipping it would touch the real preference.
 verifyButton(identifier: "settings.lock", "toddler-lock toggle")
 
+// 7c. The theme picker must be exposed too — the demo-recording
+//     harness switches themes through it.
+verifyButton(identifier: "settings.theme", "theme picker")
+
 // 8a. The ⓘ button opens the About page (backstory + licences), then
 //     dwell well past the fade animations — assertions come from the
 //     log, but a human watching make smoke should actually see it.
 pressButton(where: { _, _, id in id == "settings.about" }, "settings info")
 usleep(1_500_000)
 capture("build/smoke-about.png")
+
+// 8a1. The licence section must render real content, not raw
+//      "license.<id>" keys — regression guard for the
+//      String.LocalizationValue interpolation bug that turned the
+//      lookup key into "license.%@". "MIT License" is the untranslated
+//      legal name, present in every localization.
+verifyText(containing: "MIT License", "about licence texts")
 
 // 8a2. The source-code link must be exposed to Accessibility. Found,
 //      NOT pressed — pressing would open a browser mid-harness.

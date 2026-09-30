@@ -73,7 +73,10 @@ public enum L10n {
 
     /// Localized third-party component titles ("license.<id>").
     public static func licenseTitle(_ id: String) -> String {
-        String(localized: String.LocalizationValue("license.\(id)"),
+        // Concatenation, NOT interpolation: "license.\(id)" would turn
+        // the id into a %@ format argument, making the lookup key
+        // "license.%@" — the lookup misses and the raw key renders.
+        String(localized: String.LocalizationValue("license." + id),
                bundle: TappyResources.bundle)
     }
     public static var hintControls: String { String(localized: "hint.controls", bundle: TappyResources.bundle) }
