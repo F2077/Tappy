@@ -50,7 +50,10 @@ xcrun notarytool submit build/Tappy.dmg \
     --wait
 xcrun stapler staple build/Tappy.dmg
 
-# Gatekeeper's own verdict — the whole point of the exercise.
-spctl -a -vv build/Tappy.dmg
+# Gatekeeper's own verdict — the whole point of the exercise. A DMG
+# must be assessed as a file to open: plain `spctl -a` only accepts
+# app bundles and reports "does not seem to be an app" even for a
+# properly notarized DMG (TN2206).
+spctl -a -vv -t open --context context:primary-signature build/Tappy.dmg
 
 echo "Built notarized build/Tappy.dmg"
