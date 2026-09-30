@@ -16,6 +16,12 @@ mkdir -p "$STAGING/Packs"
 cp -R "$APP" "$STAGING/"
 ln -sf /Applications "$STAGING/Applications"
 
+# License texts at the DMG root: the in-app About page and the bundled
+# NOTICE.txt already satisfy the attribution duties, but a top-level
+# copy keeps compliance visible without launching the app.
+cp LICENSE "$STAGING/LICENSE.txt"
+cp NOTICE "$STAGING/NOTICE.txt"
+
 # Each pack also ships as a standalone zip archive: parents can drag it
 # into ~/Library/Application Support/Tappy/Packs/ for any Tappy install.
 for pack in "$PACKS_SRC"/*.tappypack; do
