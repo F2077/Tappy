@@ -101,6 +101,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+        // Demo recording: expand to fill the main screen without
+        // the kiosk (record-demo.sh needs to keep process switching
+        // so it can stop the recorder afterwards).
+        if SmokeMode.wantsFullscreen {
+            DispatchQueue.main.async {
+                guard let window = NSApp.windows.first,
+                      let screen = NSScreen.main else { return }
+                window.setFrame(screen.visibleFrame, display: true)
+            }
+        }
+
         // Smoke mode runs as a plain windowed app — no kiosk takeover,
         // no full screen.
         KioskController.sync(enabled: SettingsStore.shared.toddlerLock)

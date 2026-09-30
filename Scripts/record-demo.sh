@@ -8,9 +8,9 @@
 # Recording permission for the terminal app.
 #
 # Note: screencapture -l <windowID> fails silently on macOS 27,
-# so we record the full screen instead. Tappy launches fullscreen
-# in production; the smoke window is centered and the recording
-# shows the whole desktop, which is acceptable for review.
+# so we record the full screen instead. The app is toggled to
+# fullscreen via Ctrl-Cmd-F before recording starts. The cursor
+# is not captured (no -C flag).
 
 set -eu
 cd "$(dirname "$0")/.."
@@ -23,25 +23,29 @@ OUT="build/Tappy-demo.mov"
 rm -f "$OUT"
 
 echo "Launching Tappy in demo mode…"
-TAPPY_SMOKE=1 TAPPY_SMOKE_SECONDS=45 .build/debug/Tappy &
+# TAPPY_SMOKE=1 keeps sounds muted and enables the safety-net timer.
+# TAPPY_SMOKE_FULLSCREEN=1 expands the window to fill the main
+# screen (implemented in TappyApp.swift; kiosk stays off so we
+# can stop the recording afterwards).
+TAPPY_SMOKE=1 TAPPY_SMOKE_SECONDS=45 TAPPY_SMOKE_FULLSCREEN=1 .build/debug/Tappy &
 PID=$!
 trap 'kill "$PID" 2>/dev/null; exit 1' INT TERM
 
-# Wait for the window to appear, then get its id (for logging only;
-# we record full screen).
+# Wait for the window to appear.
 WIN=""
 for _ in $(seq 1 30); do
     WIN=$(swift "$RECORD_EVENTS" --find-window "$PID" 2>/dev/null) && break
     sleep 0.5
 done
 [ -n "$WIN" ] || { echo "error: no window found for pid $PID" >&2; kill "$PID"; exit 1; }
-echo "Window id: $WIN (recording full screen)"
+echo "Window id: $WIN"
 
 # Start recording. No -V flag: screencapture only writes the file
 # when it reaches the -V duration; killing early produces nothing.
-# We record until the demo script finishes, then stop it.
+# We record until the demo script finishes, then stop it. The -C
+# flag excludes the cursor from the video.
 echo "Recording to $OUT …"
-screencapture -v "$OUT" &
+screencapture -v -C "$OUT" &
 CAP_PID=$!
 
 # Give screencapture a moment to initialize before driving the app.
