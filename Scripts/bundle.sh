@@ -16,6 +16,9 @@ BUNDLE_ID=${TAPPY_BUNDLE_ID:-com.github.f2077.tappy}
 SIGN_IDENTITY=${TAPPY_SIGN_IDENTITY:--}
 PROFILE=${TAPPY_PROVISION_PROFILE:-}
 ENTITLEMENTS=${TAPPY_ENTITLEMENTS:-}
+# Release metadata: CI stamps the tag version + run number.
+VERSION=${TAPPY_VERSION:-1.0}
+BUILD_NUMBER=${TAPPY_BUILD_NUMBER:-1}
 
 APP=build/Tappy.app
 rm -rf "$APP"
@@ -62,8 +65,8 @@ cat > "$APP/Contents/Info.plist" <<EOF
     <key>CFBundleName</key><string>Pat-a-Pet</string>
     <key>CFBundleDisplayName</key><string>Pat-a-Pet</string>
     <key>CFBundleIdentifier</key><string>$BUNDLE_ID</string>
-    <key>CFBundleVersion</key><string>1</string>
-    <key>CFBundleShortVersionString</key><string>1.0</string>
+    <key>CFBundleVersion</key><string>$BUILD_NUMBER</string>
+    <key>CFBundleShortVersionString</key><string>$VERSION</string>
     <key>CFBundleExecutable</key><string>Tappy</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>LSMinimumSystemVersion</key><string>14.0</string>

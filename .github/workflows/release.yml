@@ -1,0 +1,81 @@
+name: release
+
+# Direct-distribution release for regions not served by the App Store
+# (e.g. mainland China): a Developer ID signed, notarized, stapled
+# DMG attached to a GitHub Release. Trigger by pushing a version tag
+# (git tag v1.0.0 && git push origin v1.0.0) or manually from the
+# Actions tab. Secrets setup: docs/release.md.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version, e.g. 1.0.0 (tag v<version> is created)"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+
+jobs:
+  dmg:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute version and tag
+        id: v
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+            echo "tag=v${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+            echo "tag=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Import Developer ID certificate
+        env:
+          P12_BASE64: ${{ secrets.TAPPY_DEVELOPER_ID_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.TAPPY_DEVELOPER_ID_P12_PASSWORD }}
+        run: |
+          set -e
+          security create-keychain -p "" build.keychain
+          security set-keychain-settings -lut 3600 build.keychain
+          security unlock-keychain -p "" build.keychain
+          echo "$P12_BASE64" | base64 -d > /tmp/dev-id.p12
+          security import /tmp/dev-id.p12 -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          security list-keychains -d user -s build.keychain $(security list-keychains -d user | tr -d '"')
+          rm -f /tmp/dev-id.p12
+
+      - name: Headless checks
+        run: make test
+
+      - name: Build, sign, notarize, staple
+        env:
+          NOTARY_P8_BASE64: ${{ secrets.TAPPY_NOTARY_KEY_P8_BASE64 }}
+          TAPPY_NOTARY_KEY_ID: ${{ secrets.TAPPY_NOTARY_KEY_ID }}
+          TAPPY_NOTARY_ISSUER_ID: ${{ secrets.TAPPY_NOTARY_ISSUER_ID }}
+          TAPPY_VERSION: ${{ steps.v.outputs.version }}
+          TAPPY_BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          set -e
+          echo "$NOTARY_P8_BASE64" | base64 -d > /tmp/AuthKey.p8
+          # Identity name carries the team ID — discover it from the
+          # keychain at runtime, never hardcode it in the repo.
+          IDENTITY=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | sed -E 's/.*"(.*)"/\1/')
+          [ -n "$IDENTITY" ] || { echo "error: Developer ID Application identity not found" >&2; exit 1; }
+          TAPPY_DEVELOPER_ID_IDENTITY="$IDENTITY" \
+          TAPPY_NOTARY_KEY=/tmp/AuthKey.p8 \
+            make release-dmg
+          rm -f /tmp/AuthKey.p8
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.v.outputs.tag }}
+        run: gh release create "$TAG" build/Tappy.dmg --title "Pat-a-Pet $TAG" --generate-notes
