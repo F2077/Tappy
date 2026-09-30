@@ -83,7 +83,8 @@ TAPPY_NOTARY_ISSUER_ID=…
 本地下载(或 `curl -L` release 资产)后:
 
 ```sh
-spctl -a -vv Tappy.dmg        # 期望: accepted, source=Notarized Developer ID
+spctl -a -vv -t open --context context:primary-signature Tappy.dmg
+# 期望: accepted, source=Notarized Developer ID
 ```
 
 双击打开应**无任何警告**。如果显示"已损坏",说明签错证书;
