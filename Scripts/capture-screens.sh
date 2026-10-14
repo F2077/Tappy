@@ -19,8 +19,14 @@ for lang in $LANGS; do
     rm -rf "$dir"
     mkdir -p "$dir"
     echo "=== capturing $lang ==="
+    # Pin the start state via NSArgumentDomain (per-process, higher
+    # priority than the persisted app domain): SettingsStore otherwise
+    # restores the last-used pack/scene, and stage 02's hold-S *toggles*
+    # between the two scenes — so without the pin, leftover state from a
+    # previous run silently swaps which scene each stage captures.
     TAPPY_SMOKE=1 TAPPY_WINDOW=1440x900 TAPPY_LANG=$lang TAPPY_SMOKE_SECONDS=90 \
-        .build/release/Tappy >/dev/null 2>&1 &
+        .build/release/Tappy -tappy.activePack default -tappy.scene mushroomForest \
+        >/dev/null 2>&1 &
     PID=$!
     trap 'kill "$PID" 2>/dev/null' EXIT
     if swift Scripts/capture-screens.swift "$PID" "$dir"; then
